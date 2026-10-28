@@ -618,3 +618,43 @@ async function loadPublishedSwapAds() {
 }
 
 loadPublishedSwapAds();
+
+/* ---------- Search and filter swap ads ---------- */
+(function addSwapAdsSearch() {
+  const adsContainer = document.querySelector('#publishedSwapAds');
+  if (!adsContainer || document.querySelector('#swapAdsSearch')) return;
+
+  const searchBox = document.createElement('input');
+  searchBox.id = 'swapAdsSearch';
+  searchBox.type = 'search';
+  searchBox.placeholder = 'ابحث عن غرض أو مدينة...';
+  searchBox.setAttribute('aria-label', 'البحث عن إعلانات التبادل');
+  searchBox.className =
+    'w-full rounded-xl border p-3 mb-3 text-base';
+
+  const searchMessage = document.createElement('p');
+  searchMessage.className = 'text-sm text-slate-500 mb-3';
+  searchMessage.textContent = 'اكتب اسم الغرض أو المدينة للبحث.';
+
+  adsContainer.insertBefore(searchMessage, adsContainer.firstChild);
+  adsContainer.insertBefore(searchBox, searchMessage);
+
+  searchBox.addEventListener('input', () => {
+    const query = searchBox.value.trim().toLocaleLowerCase();
+    const cards = Array.from(adsContainer.querySelectorAll('article'));
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const matches = card.textContent
+        .toLocaleLowerCase()
+        .includes(query);
+
+      card.hidden = !matches;
+      if (matches) visibleCount++;
+    });
+
+    searchMessage.textContent = query
+      ? `عدد الإعلانات المطابقة: ${visibleCount}`
+      : 'اكتب اسم الغرض أو المدينة للبحث.';
+  });
+})();
