@@ -1,6 +1,5 @@
 import { createIcons, icons } from 'https://cdn.jsdelivr.net/npm/lucide@latest/+esm';
 import { CATEGORIES, CURATED, TIME_WORDS, SUGGESTIONS, DEMO } from './data.js';
-
 const $ = (s) => document.querySelector(s);
 const icon = () => createIcons({ icons });
 const byId = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
@@ -619,25 +618,30 @@ async function loadPublishedSwapAds() {
 
 loadPublishedSwapAds();
 
-/* ---------- Search and filter swap ads ---------- */
-(function addSwapAdsSearch() {
+/* ---------- Search published swap ads ---------- */
+function setupSwapAdsSearch() {
   const adsContainer = document.querySelector('#publishedSwapAds');
-  if (!adsContainer || document.querySelector('#swapAdsSearch')) return;
+
+  if (!adsContainer) {
+    setTimeout(setupSwapAdsSearch, 500);
+    return;
+  }
+
+  if (document.querySelector('#swapAdsSearch')) return;
 
   const searchBox = document.createElement('input');
   searchBox.id = 'swapAdsSearch';
   searchBox.type = 'search';
   searchBox.placeholder = 'ابحث عن غرض أو مدينة...';
   searchBox.setAttribute('aria-label', 'البحث عن إعلانات التبادل');
-  searchBox.className =
-    'w-full rounded-xl border p-3 mb-3 text-base';
+  searchBox.className = 'w-full rounded-xl border p-3 mb-3 text-base';
 
   const searchMessage = document.createElement('p');
   searchMessage.className = 'text-sm text-slate-500 mb-3';
   searchMessage.textContent = 'اكتب اسم الغرض أو المدينة للبحث.';
 
-  adsContainer.insertBefore(searchMessage, adsContainer.firstChild);
-  adsContainer.insertBefore(searchBox, searchMessage);
+  adsContainer.insertBefore(searchBox, adsContainer.firstChild);
+  adsContainer.insertBefore(searchMessage, searchBox.nextSibling);
 
   searchBox.addEventListener('input', () => {
     const query = searchBox.value.trim().toLocaleLowerCase();
@@ -645,10 +649,7 @@ loadPublishedSwapAds();
     let visibleCount = 0;
 
     cards.forEach(card => {
-      const matches = card.textContent
-        .toLocaleLowerCase()
-        .includes(query);
-
+      const matches = card.textContent.toLocaleLowerCase().includes(query);
       card.hidden = !matches;
       if (matches) visibleCount++;
     });
@@ -657,4 +658,9 @@ loadPublishedSwapAds();
       ? `عدد الإعلانات المطابقة: ${visibleCount}`
       : 'اكتب اسم الغرض أو المدينة للبحث.';
   });
-})();
+}
+
+setupSwapAdsSearch();
+
+/* ---------- Search and filter swap ads ---------- */
+(
