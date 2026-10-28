@@ -195,5 +195,20 @@ tailwind.config = {
 </div>
 
 <script type="module" src="app.js"></script>
+  <button
+  type="button"
+  onclick="document.getElementById('swapAdForm').hidden = false"
+  style="display:block;width:100%;padding:15px;margin:15px 0;background:#166534;color:white;border:0;border-radius:12px;font-size:18px;font-weight:bold"
+>
+  + أضف إعلان تبادل
+</button>
+
+<div id="swapAdForm" hidden style="padding:15px;border:1px solid #ddd;border-radius:12px;margin:15px 0">
+  <h3>إضافة إعلان تبادل</h3>
+  <p>تم فتح نموذج الإعلان. ربطه بقاعدة البيانات يحتاج كود الإرسال الخاص بالموقع.</p>
+  <button type="button" onclick="document.getElementById('swapAdForm').hidden = true">
+    إغلاق
+  </button>
+</div>
 </body>
 </html>
