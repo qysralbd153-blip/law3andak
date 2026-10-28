@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script>
+window.onerror=function(msg,src,line,col,err){window.parent.postMessage({type:'app-error',message:msg,source:src,lineno:line,colno:col,stack:err&&err.stack||''},'*');};
+window.onunhandledrejection=function(e){window.parent.postMessage({type:'app-error',message:'Unhandled promise rejection: '+(e.reason&&e.reason.message||e.reason||'unknown'),stack:e.reason&&e.reason.stack||''},'*');};
+window.addEventListener('error',function(e){var t=e&&e.target;if(t&&t!==window&&t.tagName==='SCRIPT'){var u=t.src||'';window.parent.postMessage({type:'app-error',message:'Failed to load script'+(u?': '+u:' (inline module)'),source:u},'*');}},true);
+(function(){var _f=window.fetch;window.fetch=function(){var a=arguments,u=typeof a[0]==='string'?a[0]:(a[0]&&a[0].url)||'';var p=_f.apply(this,a);p.then(function(r){if(r.status===500){r.clone().text().then(function(b){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:b},'*');}).catch(function(){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:''},'*');});}}).catch(function(e){window.parent.postMessage({type:'fetch-error',url:u,status:0,body:e.message||'fetch failed'},'*');});return p;};})();
+</script>
+<script src="https://builder.puter.com/runtime.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F5F55">
+<meta name="description" content="لو عندك — اكتشف طرق مبتكرة لتبادل المهارات والأغراض والوقت بدون مصاري">
+<title>لو عندك</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['"IBM Plex Sans Arabic"', 'system-ui', 'sans-serif'] },
+      colors: {
+        brand: { 50:'#EEF7F5', 100:'#D5ECE7', 200:'#A9D8CE', 500:'#16806F', 600:'#0F6B5E', 700:'#0F5F55', 800:'#0C4A43', 900:'#0A3833' },
+        sand: { 50:'#FBF8F3', 100:'#F5EFE4', 200:'#EADFCC' },
+        amber2: { 100:'#FDEFD6', 500:'#E08A1E', 600:'#C47410' }
+      }
+    }
+  }
+}
+</script>
+<style>
+  html, body { -webkit-tap-highlight-color: transparent; }
+  body { font-family: "IBM Plex Sans Arabic", system-ui, sans-serif; }
+  .screen { display: none; }
+  .screen.active { display: block; animation: fade .25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .opt-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+  .opt.open .opt-body { grid-template-rows: 1fr; }
+  .opt-body > div { overflow: hidden; }
+  .opt.open .chev { transform: rotate(180deg); }
+  .chev { transition: transform .2s; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+  .sheet { transform: translateY(100%); transition: transform .28s ease; }
+  .sheet.show { transform: none; }
+  .backdrop { opacity: 0; pointer-events: none; transition: opacity .25s; }
+  .backdrop.show { opacity: 1; pointer-events: auto; }
+  .spin { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  textarea { resize: none; }
+  .safe-b { padding-bottom: max(env(safe-area-inset-bottom), 8px); }
+</style>
+    <!-- puter-pwa: generated, do not edit -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="لو عندك">
+    <!-- /puter-pwa -->
+</head>
+<body class="bg-sand-50 text-slate-800 antialiased">
+<div class="max-w-md mx-auto min-h-screen bg-sand-50 relative pb-24">
+
+  <header class="sticky top-0 z-20 bg-sand-50/95 backdrop-blur border-b border-sand-200">
+    <div class="flex items-center justify-between px-5 h-14">
+      <button id="backBtn" class="hidden w-10 h-10 -mr-2 rounded-full flex items-center justify-center hover:bg-sand-100" aria-label="رجوع">
+        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+      </button>
+      <div class="flex items-center gap-2">
+        <img src="icon.svg" alt="" class="w-8 h-8 rounded-lg">
+        <span class="font-bold text-lg text-brand-800">لو عندك</span>
+      </div>
+      <span class="text-xs font-medium text-brand-700 bg-brand-50 border border-brand-100 rounded-full px-2.5 py-1">نسخة تجريبية</span>
+    </div>
+  </header>
+
+  <main id="screen-home" class="screen active px-5 pt-5">
+    <section class="bg-brand-700 text-white rounded-3xl p-5 relative overflow-hidden">
+      <div class="absolute -left-8 -top-8 w-32 h-32 rounded-full bg-white/10"></div>
+      <div class="absolute left-10 -bottom-10 w-24 h-24 rounded-full bg-white/5"></div>
+      <p class="text-brand-100 text-sm mb-1">بلا مصاري، بس بالتبادل</p>
+      <h1 class="text-2xl font-bold leading-snug mb-2">شو عندك؟ وشو ناقصك؟</h1>
+      <p class="text-brand-100 text-[15px] leading-7">احكيلنا شو عندك وشو بتحتاج، ونحنا منقترحلك أفكار تبادل ذكية مع ناس حواليك.</p>
+    </section>
+
+    <div class="flex items-center justify-between mt-6 mb-3">
+      <h2 class="font-bold text-slate-900">اختار وعبّي اللي بيناسبك</h2>
+      <button id="demoBtn" class="text-sm font-semibold text-brand-700 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-brand-50">
+        <i data-lucide="wand-sparkles" class="w-4 h-4"></i> عبّي مثال
+      </button>
+    </div>
+
+    <div id="options" class="space-y-3"></div>
+
+    <p id="hint" class="text-sm text-slate-500 text-center mt-4">عبّي خيار واحد على الأقل لتطلعلك الفرص</p>
+
+    <button id="discoverBtn" class="mt-3 w-full h-14 rounded-2xl bg-amber2-500 hover:bg-amber2-600 text-white font-bold text-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed transition" disabled>
+      <i data-lucide="sparkles" class="w-5 h-5"></i>
+      <span>اكتشف الفرص</span>
+    </button>
+
+    <button id="sampleBtn" class="mt-3 w-full h-12 rounded-2xl border border-sand-200 bg-white text-slate-700 font-semibold flex items-center justify-center gap-2 hover:bg-sand-100">
+      <i data-lucide="eye" class="w-4 h-4"></i> شوف نتائج تجريبية جاهزة
+    </button>
+
+    <section class="mt-8">
+      <h2 class="font-bold text-slate-900 mb-3">تبادلات صارت مؤخراً</h2>
+      <div id="feed" class="flex gap-3 overflow-x-auto no-scrollbar -mx-5 px-5 pb-1"></div>
+    </section>
+  </main>
+
+  <main id="screen-loading" class="screen px-5">
+    <div class="flex flex-col items-center justify-center text-center" style="min-height:70vh">
+      <div class="w-16 h-16 rounded-full border-4 border-brand-100 border-t-brand-600 spin mb-5"></div>
+      <p class="font-bold text-lg text-slate-900">عم ندوّرلك على فرص...</p>
+      <p id="loadingText" class="text-slate-500 mt-1">عم نقارن اللي عندك مع اللي بيحتاجه غيرك</p>
+    </div>
+  </main>
+
+  <main id="screen-results" class="screen px-5 pt-5">
+    <div class="mb-4">
+      <h1 class="text-xl font-bold text-slate-900">لقينالك <span id="resCount">3</span> فرص تبادل</h1>
+      <p class="text-slate-500 text-sm mt-1">مبنية على اللي كتبته. كل فكرة فيك تعدّلها حسب ما بيناسبك.</p>
+    </div>
+    <div id="inputSummary" class="flex flex-wrap gap-2 mb-5"></div>
+    <div id="results" class="space-y-4"></div>
+
+    <div class="grid grid-cols-2 gap-3 mt-5">
+      <button id="moreBtn" class="h-12 rounded-2xl bg-brand-700 hover:bg-brand-800 text-white font-semibold flex items-center justify-center gap-2">
+        <i data-lucide="refresh-cw" class="w-4 h-4"></i> أفكار تانية
+      </button>
+      <button id="editBtn" class="h-12 rounded-2xl border border-sand-200 bg-white text-slate-700 font-semibold flex items-center justify-center gap-2 hover:bg-sand-100">
+        <i data-lucide="pencil" class="w-4 h-4"></i> عدّل أجوبتي
+      </button>
+    </div>
+  </main>
+
+  <main id="screen-saved" class="screen px-5 pt-5">
+    <h1 class="text-xl font-bold text-slate-900 mb-1">محفوظاتي</h1>
+    <p class="text-slate-500 text-sm mb-5">الأفكار اللي عجبتك (بتنمسح لما تسكّر الصفحة بهالنسخة التجريبية)</p>
+    <div id="savedList" class="space-y-4"></div>
+  </main>
+
+  <main id="screen-how" class="screen px-5 pt-5">
+    <h1 class="text-xl font-bold text-slate-900 mb-5">كيف بتشتغل «لو عندك»؟</h1>
+    <ol class="space-y-3" id="howList"></ol>
+    <div class="mt-6 bg-white border border-sand-200 rounded-2xl p-5">
+      <h2 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5 text-brand-600"></i> نصايح لتبادل آمن</h2>
+      <ul class="space-y-2 text-[15px] leading-7 text-slate-600">
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 mt-1.5 shrink-0"></i>اتفقوا على التفاصيل كتابةً قبل ما تبلشوا</li>
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 mt-1.5 shrink-0"></i>أول لقاء خليه بمكان عام</li>
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 mt-1.5 shrink-0"></i>ابدأ بتبادل صغير لتبنوا ثقة</li>
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 mt-1.5 shrink-0"></i>ساعة بساعة: وقت الكل إلو نفس القيمة</li>
+      </ul>
+    </div>
+  </main>
+
+  <nav class="fixed bottom-0 inset-x-0 z-30">
+    <div class="max-w-md mx-auto bg-white border-t border-sand-200 safe-b">
+      <div class="grid grid-cols-3 pt-2">
+        <button data-nav="home" class="nav-btn flex flex-col items-center gap-1 py-1 text-xs font-medium">
+          <i data-lucide="house" class="w-6 h-6"></i> الرئيسية
+        </button>
+        <button data-nav="saved" class="nav-btn flex flex-col items-center gap-1 py-1 text-xs font-medium relative">
+          <span class="relative"><i data-lucide="bookmark" class="w-6 h-6"></i>
+            <span id="savedBadge" class="hidden absolute -top-1 -left-2 min-w-[18px] h-[18px] px-1 rounded-full bg-amber2-500 text-white text-[11px] leading-[18px] text-center"></span>
+          </span>
+          محفوظاتي
+        </button>
+        <button data-nav="how" class="nav-btn flex flex-col items-center gap-1 py-1 text-xs font-medium">
+          <i data-lucide="circle-help" class="w-6 h-6"></i> كيف بتشتغل
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="backdrop" class="backdrop fixed inset-0 bg-slate-900/40 z-40"></div>
+  <div id="sheet" class="sheet fixed bottom-0 inset-x-0 z-50">
+    <div class="max-w-md mx-auto bg-white rounded-t-3xl p-5 safe-b">
+      <div class="w-10 h-1.5 bg-sand-200 rounded-full mx-auto mb-4"></div>
+      <div id="sheetContent"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed top-16 inset-x-0 z-[60] flex justify-center pointer-events-none opacity-0 transition-opacity">
+    <div class="bg-slate-900 text-white text-sm font-medium rounded-full px-4 py-2.5 flex items-center gap-2">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-200"></i><span id="toastText"></span>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
