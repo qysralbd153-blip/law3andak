@@ -661,6 +661,3 @@ function setupSwapAdsSearch() {
 }
 
 setupSwapAdsSearch();
-
-/* ---------- Search and filter swap ads ---------- */
-(
