@@ -544,3 +544,77 @@ document.querySelector('#swapAdForm').addEventListener('submit', async event => 
     submitButton.disabled = false;
   }
 });
+
+/* ---------- Load published swap ads ---------- */
+async function loadPublishedSwapAds() {
+  try {
+    const response = await fetch(
+      `${SWAP_SUPABASE_URL}/rest/v1/ads?select=id,title,description,location,created_at&category=eq.%D8%AA%D8%A8%D8%A7%D8%AF%D9%84&order=created_at.desc`,
+      {
+        headers: {
+          apikey: SWAP_SUPABASE_KEY,
+          Authorization: `Bearer ${SWAP_SUPABASE_KEY}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const ads = await response.json();
+
+    let container = document.querySelector('#publishedSwapAds');
+
+    if (!container) {
+      container = document.createElement('section');
+      container.id = 'publishedSwapAds';
+      container.className = 'mx-auto w-full max-w-3xl p-4 space-y-3';
+
+      const main = document.querySelector('main');
+      if (main) {
+        main.prepend(container);
+      } else {
+        document.body.prepend(container);
+      }
+    }
+
+    container.replaceChildren();
+
+    const heading = document.createElement('h2');
+    heading.textContent = 'إعلانات التبادل المنشورة';
+    heading.className = 'text-xl font-bold';
+    container.appendChild(heading);
+
+    if (ads.length === 0) {
+      const empty = document.createElement('p');
+      empty.textContent = 'ما في إعلانات منشورة حالياً.';
+      container.appendChild(empty);
+      return;
+    }
+
+    ads.forEach(ad => {
+      const card = document.createElement('article');
+      card.className = 'rounded-2xl border p-4 space-y-2';
+
+      const title = document.createElement('h3');
+      title.className = 'font-bold text-lg';
+      title.textContent = ad.title;
+
+      const description = document.createElement('p');
+      description.className = 'text-sm';
+      description.textContent = ad.description || '';
+
+      const location = document.createElement('p');
+      location.className = 'text-sm text-slate-500';
+      location.textContent = `الموقع: ${ad.location || 'غير محدد'}`;
+
+      card.append(title, description, location);
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Loading swap ads failed:', error);
+  }
+}
+
+loadPublishedSwapAds();
