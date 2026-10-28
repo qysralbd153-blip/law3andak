@@ -417,3 +417,130 @@ $('#backdrop').onclick = closeSheet;
 document.querySelectorAll('.nav-btn').forEach(b => b.onclick = () => go(b.dataset.nav));
 go('home', false);
 icon();
+
+/* ---------- Add swap advertisement ---------- */
+const SWAP_SUPABASE_URL = 'https://izkguvohogjjjxrjdsob.supabase.co';
+const SWAP_SUPABASE_KEY = 'sb_publishable_EK6hrMLSNxDbbUj_cQJFrg_BUinV033';
+
+const addSwapButton = document.createElement('button');
+addSwapButton.type = 'button';
+addSwapButton.textContent = '+ أضف إعلان تبادل';
+addSwapButton.className =
+  'mt-4 w-full h-14 rounded-2xl bg-brand-700 text-white font-bold text-lg';
+
+const sampleButton = document.querySelector('#sampleBtn');
+if (sampleButton) sampleButton.after(addSwapButton);
+
+const swapFormLayer = document.createElement('div');
+swapFormLayer.className =
+  'fixed inset-0 z-[100] bg-black/50 p-4 flex items-center justify-center hidden';
+swapFormLayer.innerHTML = `
+  <form id="swapAdForm"
+    class="bg-white w-full max-w-lg rounded-2xl p-5 space-y-3 overflow-y-auto"
+    style="max-height:90vh">
+    <h2 class="text-xl font-bold text-slate-900">أضف إعلان تبادل</h2>
+    <p class="text-sm text-slate-500">اكتب شو عندك وشو بدك بالمقابل.</p>
+
+    <label class="block text-sm font-semibold">عنوان الإعلان</label>
+    <input name="title" required minlength="4" maxlength="100"
+      placeholder="مثلاً: ببادل لابتوب بموبايل"
+      class="w-full rounded-xl border p-3">
+
+    <label class="block text-sm font-semibold">تفاصيل التبادل</label>
+    <textarea name="description" required minlength="10" maxlength="1100"
+      rows="4" placeholder="وصف الشي الموجود عندك والشي المطلوب بالمقابل"
+      class="w-full rounded-xl border p-3"></textarea>
+
+    <label class="block text-sm font-semibold">المدينة أو المنطقة</label>
+    <input name="location" required minlength="2" maxlength="80"
+      placeholder="مثلاً: دمشق"
+      class="w-full rounded-xl border p-3">
+
+    <label class="block text-sm font-semibold">وسيلة التواصل</label>
+    <input name="contact" required minlength="5" maxlength="120"
+      placeholder="رقم أو وسيلة تواصل مناسبة"
+      class="w-full rounded-xl border p-3">
+
+    <p class="text-xs text-slate-500">
+      لا تضع كلمات مرور أو معلومات شخصية حساسة في الإعلان.
+    </p>
+
+    <button type="submit"
+      class="w-full rounded-xl bg-brand-700 text-white font-bold p-3">
+      نشر الإعلان
+    </button>
+    <button type="button" id="cancelSwapAd"
+      class="w-full rounded-xl border p-3">إلغاء</button>
+    <p id="swapAdStatus" class="text-sm" role="status"></p>
+  </form>
+`;
+document.body.append(swapFormLayer);
+
+addSwapButton.addEventListener('click', () => {
+  swapFormLayer.classList.remove('hidden');
+});
+
+document.querySelector('#cancelSwapAd').addEventListener('click', () => {
+  swapFormLayer.classList.add('hidden');
+});
+
+swapFormLayer.addEventListener('click', event => {
+  if (event.target === swapFormLayer) {
+    swapFormLayer.classList.add('hidden');
+  }
+});
+
+document.querySelector('#swapAdForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const status = document.querySelector('#swapAdStatus');
+  const submitButton = form.querySelector('button[type="submit"]');
+  const values = new FormData(form);
+
+  const ad = {
+    title: String(values.get('title')).trim(),
+    description: String(values.get('description')).trim(),
+    category: 'تبادل',
+    location: String(values.get('location')).trim(),
+    contact: String(values.get('contact')).trim()
+  };
+
+  submitButton.disabled = true;
+  status.textContent = 'عم ننشر الإعلان...';
+
+  try {
+    const response = await fetch(
+      `${SWAP_SUPABASE_URL}/rest/v1/ads`,
+      {
+        method: 'POST',
+        headers: {
+          apikey: SWAP_SUPABASE_KEY,
+          Authorization: `Bearer ${SWAP_SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(ad)
+      }
+    );
+
+    if (!response.ok) {
+      const details = await response.text();
+      throw new Error(details || `HTTP ${response.status}`);
+    }
+
+    status.textContent = 'تم نشر الإعلان بنجاح!';
+    form.reset();
+
+    setTimeout(() => {
+      swapFormLayer.classList.add('hidden');
+      status.textContent = '';
+    }, 1200);
+  } catch (error) {
+    console.error('Swap ad error:', error);
+    status.textContent =
+      'ما قدرنا ننشر الإعلان. تحقق من الاتصال وإعدادات Supabase وحاول مجدداً.';
+  } finally {
+    submitButton.disabled = false;
+  }
+});
