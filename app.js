@@ -661,3 +661,25 @@ function setupSwapAdsSearch() {
 }
 
 setupSwapAdsSearch();
+/* ---------- Show add swap advertisement button ---------- */
+(function addSwapButtonToPage() {
+  if (document.getElementById('addSwapAdButton')) return;
+
+  const button = document.createElement('button');
+  button.id = 'addSwapAdButton';
+  button.type = 'button';
+  button.textContent = '+ أضف إعلان تبادل';
+  button.className =
+    'mx-auto my-4 block w-full max-w-3xl rounded-2xl bg-green-700 p-4 text-lg font-bold text-white';
+
+  button.addEventListener('click', () => {
+    alert('زر إضافة الإعلان يعمل، ونحتاج ربطه بنموذج النشر الموجود بالموقع.');
+  });
+
+  const main = document.querySelector('main');
+  if (main) {
+    main.appendChild(button);
+  } else {
+    document.body.appendChild(button);
+  }
+})();
