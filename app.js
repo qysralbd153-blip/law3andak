@@ -517,7 +517,7 @@ document.querySelector('#swapAdForm').addEventListener('submit', async event => 
           apikey: SWAP_SUPABASE_KEY,
           Authorization: `Bearer ${SWAP_SUPABASE_KEY}`,
           'Content-Type': 'application/json',
-          Prefer: 'return=minimal'
+          Prefer: 'return=representation'
         },
         body: JSON.stringify(ad)
       }
