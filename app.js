@@ -498,7 +498,7 @@ document.querySelector('#swapAdForm').addEventListener('submit', async event => 
 
   const form = event.currentTarget;
   const status = document.querySelector('#swapAdStatus');
-  status.textContent = 'وصل الضغط إلى كود النشر';
+  status.textContent = 'وصلنا إلى كود الحفظ';
   const submitButton = form.querySelector('button[type="submit"]');
   const values = new FormData(form);
 
