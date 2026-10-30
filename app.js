@@ -426,10 +426,12 @@ addSwapButton.type = 'button';
 addSwapButton.textContent = '+ أضف إعلان تبادل';
 addSwapButton.className =
   'mt-4 w-full h-14 rounded-2xl bg-brand-700 text-white font-bold text-lg';
-
 const sampleButton = document.querySelector('#sampleBtn');
-if (sampleButton) sampleButton.after(addSwapButton);
-
+if (sampleButton) {
+  sampleButton.after(addSwapButton);
+} else {
+  document.body.appendChild(addSwapButton);
+}
 const swapFormLayer = document.createElement('div');
 swapFormLayer.className =
   'fixed inset-0 z-[100] bg-black/50 p-4 flex items-center justify-center hidden';
