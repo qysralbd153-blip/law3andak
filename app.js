@@ -493,7 +493,10 @@ swapFormLayer.addEventListener('click', event => {
   }
 });
 
-document.querySelector('#swapAdForm').addEventListener('submit', async event => {
+document.querySelector('#swapAdForm').addEventListener('submit', event => {
+  event.preventDefault();
+  document.querySelector('#swapAdStatus').textContent = 'وصل حدث submit بنجاح';
+});
   event.preventDefault();
 
   const form = event.currentTarget;
