@@ -511,8 +511,7 @@ document.querySelector('#swapAdForm').addEventListener('submit', async event => 
   };
 
   submitButton.disabled = true;
-  status.textContent = 'عم ننشر الإعلان...';
-
+  status.textContent = 'وصل الضغط إلى كود النشر';
   try {
     const response = await fetch(
       `${SWAP_SUPABASE_URL}/rest/v1/ads`,
