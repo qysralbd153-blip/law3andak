@@ -476,7 +476,9 @@ swapFormLayer.innerHTML = `
   </form>
 `;
 document.body.append(swapFormLayer);
-
+document.querySelector('#swapAdForm button[type="submit"]').addEventListener('click', () => {
+  document.querySelector('#swapAdStatus').textContent = 'زر النشر يستجيب';
+});
 addSwapButton.addEventListener('click', () => {
   swapFormLayer.classList.remove('hidden');
 });
