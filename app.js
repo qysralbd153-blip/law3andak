@@ -434,7 +434,7 @@ const swapFormLayer = document.createElement('div');
 swapFormLayer.className =
   'fixed inset-0 z-[100] bg-black/50 p-4 flex items-center justify-center hidden';
 swapFormLayer.innerHTML = `
-  <form id="swapAdForm"
+  <form id="swapAdForm" onsubmit="return false"
     class="bg-white w-full max-w-lg rounded-2xl p-5 space-y-3 overflow-y-auto"
     style="max-height:90vh">
     <h2 class="text-xl font-bold text-slate-900">أضف إعلان تبادل</h2>
